@@ -11,6 +11,7 @@ import os
 from dotenv import load_dotenv
 from lagom import Container, dependency_definition
 
+from langgraph_tools.protocols.i_azure_openai_service import IAzureOpenAIService
 from langgraph_tools.protocols.i_summarization_service import ISummarizationService
 from langgraph_tools.protocols.i_text_extraction_service import (
     ITextExtractionService,
@@ -30,7 +31,7 @@ container = Container()
 def logger() -> logging.Logger:
     logging.basicConfig(level=os.getenv("LOG_LEVEL", "ERROR"))
     logging.Formatter(fmt=" %(name)s :: %(levelname)-8s :: %(message)s")
-    return logging.getLogger("eval_user_profiles")
+    return logging.getLogger("langgraph_tools")
 
 
 @dependency_definition(container, singleton=True)
@@ -49,3 +50,12 @@ def summarization_service() -> ISummarizationService:
     )
 
     return container[SummarizationService]
+
+
+@dependency_definition(container, singleton=True)
+def azure_openai_service() -> IAzureOpenAIService:
+    from langgraph_tools.services.azure_openai_service import (
+        AzureOpenAIService,
+    )
+
+    return container[AzureOpenAIService]

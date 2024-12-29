@@ -12,9 +12,10 @@ class RecognizedEntity(BaseModel):
 
     @field_validator("confidence_score")
     @classmethod
-    def validate_confidence_score(cls, v):
+    def validate_confidence_score(cls, v) -> float:
         if not 0 <= v <= 1:
             raise ValueError("confidence_score must be between 0 and 1")
+        return v
 
 
 class RecognizedEntities(BaseModel):

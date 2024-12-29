@@ -6,8 +6,8 @@ type MessageKind = Literal["word_count", "summarize", "extract_entities"]
 
 mapping = {
     "word_count": "count the number of words",
-    "summarize": "summarize",
-    "extract_entities": "get the entities",
+    "summarize": "summarize using summarization tool",
+    "extract_entities": "get the entities using Azure service",
 }
 
 

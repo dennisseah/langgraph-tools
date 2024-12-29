@@ -8,15 +8,16 @@ from langgraph.graph import END, START, MessagesState, StateGraph
 from langgraph.graph.state import CompiledStateGraph
 from langgraph.prebuilt import ToolNode
 
-from langgraph_tools.llm_models.openai_model import get_model
+from langgraph_tools.hosting import container
 from langgraph_tools.messages.message_builder import MessageBuilder, MessageKind
+from langgraph_tools.protocols.i_azure_openai_service import IAzureOpenAIService
 from langgraph_tools.tools import count_words, get_entities, summarize
 
 # tools, count_words, get_entities and summarize
 tools = [count_words, get_entities, summarize]
 
 # bind tools to the model
-llm_model_with_tools = get_model().bind_tools(tools)
+llm_model_with_tools = container[IAzureOpenAIService].get_model().bind_tools(tools)
 
 
 def should_continue(state: MessagesState):
