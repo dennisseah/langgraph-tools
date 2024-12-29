@@ -1,0 +1,54 @@
+[tool.poetry]
+name = "langgraph-tools"
+version = "0.1.0"
+description = ""
+authors = ["Dennis Seah <dennis.seah@microsoft.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+langchain-core = "^0.3.28"
+langgraph = "^0.2.60"
+lagom = "^2.7.5"
+python-dotenv = "^1.0.1"
+azure-ai-textanalytics = "^5.3.0"
+nltk = "^3.9.1"
+aiohttp = "^3.11.11"
+langchain-openai = "^0.2.14"
+azure-identity = "^1.19.0"
+
+
+[tool.poetry.group.dev.dependencies]
+ruff = "^0.8.4"
+pyright = "^1.1.391"
+pre-commit = "^4.0.1"
+pytest = "^8.3.4"
+pytest-cov = "^6.0.0"
+pytest-mock = "^3.14.0"
+pytest-asyncio = "^0.25.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.ruff]
+exclude = ["typings"]
+
+[tool.ruff.lint]
+select = ["E", "W", "F", "I", "TID"]
+
+[tool.ruff.format]
+docstring-code-format = true
+
+[tool.pyright]
+venvPath = "."
+venv = ".venv"
+exclude = ["typings", ".venv", ".vscode", ".git"]
+
+[tool.coverage.run]
+omit = [
+    "*/__init__.py",
+    "langgraph_tools/hosting.py",
+    "langgraph_tools/protocols/*",
+    "langgraph_tools/graph.py"
+]
