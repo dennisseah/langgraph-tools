@@ -1,6 +1,7 @@
 import argparse
 import asyncio
 import os
+import sys
 
 from langchain_core.messages import AIMessage, HumanMessage, ToolMessage
 from langgraph.graph import END, START, MessagesState, StateGraph
@@ -8,6 +9,7 @@ from langgraph.graph.state import CompiledStateGraph
 from langgraph.prebuilt import ToolNode
 
 from langgraph_tools.llm_models.openai_model import get_model
+from langgraph_tools.messages.message_builder import MessageBuilder, MessageKind
 from langgraph_tools.tools import count_words, get_entities, summarize
 
 # tools, count_words, get_entities and summarize
@@ -42,31 +44,51 @@ def create_graph() -> CompiledStateGraph:
     return graph.compile()
 
 
-async def run(text: str) -> str:
+async def invoke(text: str, actions: list[MessageKind]) -> str:
     app = create_graph()
-    messages: list[HumanMessage | AIMessage | ToolMessage] = []
+    last_message: HumanMessage | AIMessage | ToolMessage | None = None
+    message = MessageBuilder().build(set(actions), text)
+
     async for value in app.astream(
-        {
-            "messages": [
-                HumanMessage(
-                    content="Count the number of words, summarize "
-                    f'and get the entities in this blob of text, "{text}".',
-                )
-            ]
-        },
+        {"messages": [message]},
         stream_mode="values",
     ):
-        messages = value["messages"]
+        last_message = value["messages"][-1]
 
-    return str(messages[-1].content)
+    return str(last_message.content) if last_message else "not results"
+
+
+def parse_args() -> tuple[str, list[MessageKind]]:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-f", "--file", help="file to process", required=True)
+    parser.add_argument("-c", "--count-words", help="count words", action="store_true")
+    parser.add_argument("-s", "--summarize", help="summarize", action="store_true")
+    parser.add_argument(
+        "-e", "--extract-entities", help="summarize", action="store_true"
+    )
+    args = parser.parse_args()
+
+    actions = []
+    if args.count_words:
+        actions.append("word_count")
+    if args.summarize:
+        actions.append("summarize")
+    if args.extract_entities:
+        actions.append("extract_entities")
+
+    if not actions:
+        print("At least one action must be selected")
+        sys.exit(1)
+
+    return args.file, actions
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser()
-    parser.add_argument("-f", "--file", help="file to process", required=True)
+    file, actions = parse_args()
 
-    path = os.path.join("data", parser.parse_args().file)
-    with open(path, "r") as file:
-        text = file.read()
-        result = asyncio.run(run(text))
+    path = os.path.join("data", file)
+    with open(path, "r") as fp:
+        text = fp.read()
+        result = asyncio.run(invoke(text, actions))
         print(result)
+        sys.exit(0)

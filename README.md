@@ -14,12 +14,18 @@ trying out tools in langgraph
 
 ## Samples
 
+`-s --summarize` perform summarization
+
+`-e --extract-entities` extract entities from the text
+
+`-c --count-words` count the number of words in the text
+
 ```sh
-python -m langgraph_tools.graph -f test1.txt
+python -m langgraph_tools.graph -f test1.txt -s -e -c
 ```
 
 ```sh
-python -m langgraph_tools.graph -f test2.txt
+python -m langgraph_tools.graph -f test2.txt -s -e -c
 ```
 
 
