@@ -11,6 +11,7 @@ import os
 from dotenv import load_dotenv
 from lagom import Container, dependency_definition
 
+from langgraph_tools.protocols.i_summarization_service import ISummarizationService
 from langgraph_tools.protocols.i_text_extraction_service import (
     ITextExtractionService,
 )
@@ -39,3 +40,12 @@ def azure_ta_service() -> ITextExtractionService:
     )
 
     return container[TextExtractionService]
+
+
+@dependency_definition(container, singleton=True)
+def summarization_service() -> ISummarizationService:
+    from langgraph_tools.services.summarization_service import (
+        SummarizationService,
+    )
+
+    return container[SummarizationService]

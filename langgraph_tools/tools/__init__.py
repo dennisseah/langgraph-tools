@@ -3,6 +3,7 @@ import asyncio
 from langchain_core.tools import tool
 
 from langgraph_tools.hosting import container
+from langgraph_tools.protocols.i_summarization_service import ISummarizationService
 from langgraph_tools.protocols.i_text_extraction_service import ITextExtractionService
 
 
@@ -17,3 +18,9 @@ def get_entities(text: str) -> list[str]:
     """Extract entities from a text"""
     result = asyncio.run(container[ITextExtractionService].recognize_entities(text))
     return [r.text for r in result[0].entities]
+
+
+@tool
+def summarize(text: str) -> str:
+    """Summarize a text"""
+    return container[ISummarizationService].summarize(text)
