@@ -20,12 +20,24 @@ trying out tools in langgraph
 
 `-c --count-words` count the number of words in the text
 
+### Using LangGraph
+
 ```sh
-python -m langgraph_tools.graph -f test1.txt -s -e -c
+python -m langgraph_tools.executors.graph_executor -f test1.txt -s -e -c
 ```
 
 ```sh
-python -m langgraph_tools.graph -f test2.txt -s -e -c
+python -m langgraph_tools.executors.graph_executor -f test2.txt -s -e -c
+```
+
+### Using LangChain Agent Executor
+
+```sh
+python -m langgraph_tools.executors.chain_executor -f test1.txt -s -e -c
+```
+
+```sh
+python -m langgraph_tools.executors.chain_executor -f test2.txt -s -e -c
 ```
 
 

@@ -16,6 +16,7 @@ nltk = "^3.9.1"
 aiohttp = "^3.11.11"
 langchain-openai = "^0.2.14"
 azure-identity = "^1.19.0"
+langchain = "^0.3.13"
 
 
 [tool.poetry.group.dev.dependencies]
@@ -50,5 +51,6 @@ omit = [
     "*/__init__.py",
     "langgraph_tools/hosting.py",
     "langgraph_tools/protocols/*",
+    "langgraph_tools/executors/*",
     "langgraph_tools/graph.py"
 ]

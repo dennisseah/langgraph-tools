@@ -5,6 +5,7 @@ import sys
 
 from langchain_core.messages.ai import AIMessage
 from langchain_core.messages.base import BaseMessage
+from langchain_core.messages.human import HumanMessage
 from langgraph.graph import END, START, MessagesState, StateGraph
 from langgraph.graph.state import CompiledStateGraph
 from langgraph.prebuilt import ToolNode
@@ -54,7 +55,7 @@ def create_graph() -> CompiledStateGraph:
 async def invoke(text: str, actions: list[MessageKind]) -> str:
     app = create_graph()
     last_message: BaseMessage | None = None
-    message = MessageBuilder().build(set(actions), text)
+    message = HumanMessage(content=MessageBuilder().build(set(actions), text))
 
     async for value in app.astream(
         {"messages": [message]},

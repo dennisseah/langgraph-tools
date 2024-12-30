@@ -1,7 +1,5 @@
 from typing import Literal
 
-from langchain_core.messages import HumanMessage
-
 type MessageKind = Literal["word_count", "summarize", "extract_entities"]
 
 mapping = {
@@ -12,12 +10,11 @@ mapping = {
 
 
 class MessageBuilder:
-    def build(self, kinds: set[MessageKind], text: str) -> HumanMessage:
+    def build(self, kinds: set[MessageKind], text: str) -> str:
         actions = [mapping[kind] for kind in kinds]
         actions.sort()
         text_actions = "Perform the following actions: " if len(actions) > 1 else ""
 
-        content = (
+        return (
             f"{text_actions}" + ", ".join(actions) + f' on this blob of text. "{text}"'
         )
-        return HumanMessage(content=content)

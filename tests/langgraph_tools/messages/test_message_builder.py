@@ -6,13 +6,13 @@ def test_build():
     text = "This is a test"
     message = builder.build({"summarize"}, text)
     assert (
-        message.content
+        message
         == 'summarize using summarization tool on this blob of text. "This is a test"'
     )
 
     text = "This is a test"
     message = builder.build({"word_count", "summarize"}, text)
     assert (
-        message.content
+        message
         == 'Perform the following actions: count the number of words, summarize using summarization tool on this blob of text. "This is a test"'  # noqa: E501
     )
