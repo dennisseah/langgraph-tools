@@ -21,6 +21,7 @@ def test_get_model_with_key(mocker: MockerFixture):
     assert svc.get_model() is not None
     assert mocked_chat_openai.call_count == 1
     assert "azure_ad_token" not in mocked_chat_openai.call_args.kwargs
+    assert "openai_api_key" in mocked_chat_openai.call_args.kwargs
 
 
 def test_get_model_without_key(mocker: MockerFixture):

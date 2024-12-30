@@ -1,0 +1,25 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "test1",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "langgraph_tools/graph.py",
+      "console": "integratedTerminal",
+      "justMyCode": true,
+      "env": { "PYTHONPATH": "${workspaceRoot}" },
+      "args": ["-f", "test1.txt", "-s", "-c", "-e"]
+    },
+    {
+      "name": "test2",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "langgraph_tools/graph.py",
+      "console": "integratedTerminal",
+      "justMyCode": true,
+      "env": { "PYTHONPATH": "${workspaceRoot}" },
+      "args": ["-f", "test2.txt", "-s", "-c", "-e"]
+    }
+  ]
+}

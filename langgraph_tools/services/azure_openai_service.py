@@ -33,4 +33,7 @@ class AzureOpenAIService(IAzureOpenAIService):
                 .get_token("https://cognitiveservices.azure.com/.default")
                 .token
             )
+        else:
+            params["openai_api_key"] = self.env.azure_openai_api_key
+
         return AzureChatOpenAI(**params)
