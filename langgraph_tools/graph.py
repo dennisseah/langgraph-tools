@@ -3,7 +3,8 @@ import asyncio
 import os
 import sys
 
-from langchain_core.messages import AIMessage, HumanMessage, ToolMessage
+from langchain_core.messages.ai import AIMessage
+from langchain_core.messages.base import BaseMessage
 from langgraph.graph import END, START, MessagesState, StateGraph
 from langgraph.graph.state import CompiledStateGraph
 from langgraph.prebuilt import ToolNode
@@ -22,7 +23,12 @@ llm_model_with_tools = container[IAzureOpenAIService].get_model().bind_tools(too
 
 def should_continue(state: MessagesState):
     messages = state["messages"]
-    return "tools" if messages[-1].tool_calls else END  # type: ignore
+    last_message = messages[-1]
+    return (
+        "tools"
+        if isinstance(last_message, AIMessage) and last_message.tool_calls
+        else END
+    )
 
 
 def call_model(state: MessagesState):
@@ -47,7 +53,7 @@ def create_graph() -> CompiledStateGraph:
 
 async def invoke(text: str, actions: list[MessageKind]) -> str:
     app = create_graph()
-    last_message: HumanMessage | AIMessage | ToolMessage | None = None
+    last_message: BaseMessage | None = None
     message = MessageBuilder().build(set(actions), text)
 
     async for value in app.astream(
